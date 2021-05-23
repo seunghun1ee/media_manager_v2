@@ -22,7 +22,7 @@ export default {
     }
   },
   created() {
-    getRandomMetadatas().then(data => {
+    getRandomMetadatas(3).then(data => {
       this.items = data;
     }).catch(err => {
       alert(err);

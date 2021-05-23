@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-8">
         <div class="mt-5">
-          <ItemList></ItemList>
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -16,11 +16,9 @@
 <script>
 
 import Navigation from "@/components/Navigation";
-import ItemList from "@/components/ItemList";
 export default {
   name: 'App',
   components: {
-    ItemList,
     Navigation
   }
 }
