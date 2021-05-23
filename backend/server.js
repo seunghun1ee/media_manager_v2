@@ -7,6 +7,7 @@ const http = require("http").createServer(app);
 const port = 3000;
 const path = require("path");
 const fs = require("fs");
+const cors = require("cors");
 
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
@@ -16,6 +17,9 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
 const Metadata = require(path.join(__dirname,"./models/metadata.js"));
 const Tag = require(path.join(__dirname,"./models/tag.js"));
 
+const DEFAULT_ITEM_NUM = 6;
+
+app.use(cors());
 
 app.get("/",(req,res) => {
     res.send("test");
@@ -42,7 +46,7 @@ app.get("/api/getMetadatasByTags", (req,res) => {
 });
 
 app.get("/api/getRandomMetadatas", (req,res) => {
-    let limit = (req.query.limit !== undefined) ? Number(req.query.limit) : 6;
+    let limit = (req.query.limit !== undefined) ? Number(req.query.limit) : DEFAULT_ITEM_NUM;
     console.log(limit);
     Metadata.estimatedDocumentCount().exec((err,count) => {
         if(count === 0) {
@@ -52,7 +56,7 @@ app.get("/api/getRandomMetadatas", (req,res) => {
             let randomNum = Math.floor(Math.random() * count);
             console.log(count, randomNum);
             Metadata.find().skip(randomNum).limit(limit).then(randoms => {
-                res.send(randoms.map(random => random.toJSON()));
+                res.send(jsonifyMongoArray(randoms));
             })
         }
     })
@@ -66,6 +70,17 @@ app.get("/api/getAllTags", (req,res) => {
         res.send(`Internal server error, ${err}`);
     });
 })
+
+function jsonifyMongoArray(mongos) {
+    let results = [];
+    mongos.forEach(mongo => {
+        let result = mongo.toJSON();
+        result.id = result._id;
+        delete result._id;
+        results.push(result);
+    })
+    return results;
+}
 
 /*
 app.get("/api/import",(req,res) => {
