@@ -64,11 +64,18 @@ app.get("/api/getRandomMetadatas", (req,res) => {
 
 app.get("/api/getAllTags", (req,res) => {
     Tag.find({}).then(tags => {
-        res.json(tags.map(tag => tag.toJSON()));
+        res.json(jsonifyMongoArray(tags).sort(sortTagAlphabetically));
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
     });
+});
+
+app.get("/api/getTagsByType", (req,res) => {
+    let type = req.query.type;
+    Tag.find({type: type}).then(tags => {
+        res.json(jsonifyMongoArray(tags).sort(sortTagAlphabetically));
+    })
 })
 
 function jsonifyMongoArray(mongos) {
@@ -80,6 +87,16 @@ function jsonifyMongoArray(mongos) {
         results.push(result);
     })
     return results;
+}
+
+function sortTagAlphabetically(a,b) {
+    if(a.tag < b.tag) {
+        return -1;
+    }
+    if(a.tag > b.tag) {
+        return 1;
+    }
+    return 0;
 }
 
 /*

@@ -1,10 +1,11 @@
 import TagList from "@/components/TagList";
-import ItemList from "@/components/ItemList";
+import RandomItems from "@/components/RandomItems";
+import TaggedItems from "@/components/TaggedItems";
 
 export default [
     {
         path: "/",
-        component: ItemList
+        component: RandomItems
     },
     {
         path: "/tags",
@@ -12,6 +13,6 @@ export default [
     },
     {
         path: "/tags/:tag",
-        component: ItemList
+        component: TaggedItems
     }
 ]

@@ -11,23 +11,12 @@
 </template>
 
 <script>
-import {getRandomMetadatas} from "@/repository";
 
 export default {
   name: "ItemList",
-  data() {
-    return {
-      pageName: "Random files",
-      items: []
-    }
-  },
-  created() {
-    getRandomMetadatas(3).then(data => {
-      this.items = data;
-    }).catch(err => {
-      alert(err);
-      console.err(err);
-    });
+  props: {
+    pageName: String,
+    items: Array
   }
 }
 </script>

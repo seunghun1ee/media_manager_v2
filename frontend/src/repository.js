@@ -9,3 +9,7 @@ export function getMetadatasByTags(tags) {
     let queryString = "tag=" + tags.join("&tag=");
     return axios.get(`${BASE_URL}/api/getMetadatasByTags?${queryString}`).then(res => res.data);
 }
+
+export function getTagsBuTypes(type) {
+    return axios.get(`${BASE_URL}/api/getTagsByType?type=${type}`).then(res => res.data);
+}
