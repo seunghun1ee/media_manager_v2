@@ -1,14 +1,16 @@
 <template>
+  <SortControl></SortControl>
   <ItemList v-bind="{pageName: pageName, items: items}"></ItemList>
 </template>
 
 <script>
 import {getAllMetadatas} from "@/repository";
 import ItemList from "@/components/ItemList";
+import SortControl from "@/components/SortControl";
 
 export default {
   name: "AllItems",
-  components: {ItemList},
+  components: {SortControl, ItemList},
   data() {
     return {
       pageName: "All Items",

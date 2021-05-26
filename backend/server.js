@@ -26,7 +26,16 @@ app.get("/",(req,res) => {
 });
 
 app.get("/api/getAllMetadatas",(req,res) => {
-    Metadata.find({}).then(metadatas => {
+    let sortField = req.query.sortField;
+    let direction = req.query.direction;
+    let sort = {};
+    if(sortField && direction) {
+        sort[sortField] = direction;
+    }
+    else {
+        sort["uploadDate"] = -1;
+    }
+    Metadata.find({}).sort(sort).then(metadatas => {
         res.json(processDataFromDB(metadatas));
     }).catch(err => {
         res.status(500);

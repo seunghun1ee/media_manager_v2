@@ -1,6 +1,5 @@
 <template>
   <h2>{{pageName}}</h2>
-  <SortControl></SortControl>
   <hr>
   <article class="mb-3" v-for="item in items" :key="item.id">
     <h3><a class="text-decoration-none" v-bind:href="'/items/'+item.id">{{item.name}}</a></h3>
@@ -13,11 +12,8 @@
 </template>
 
 <script>
-
-import SortControl from "@/components/SortControl";
 export default {
   name: "ItemList",
-  components: {SortControl},
   props: {
     pageName: String,
     items: Array

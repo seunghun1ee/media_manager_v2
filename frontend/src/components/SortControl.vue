@@ -12,9 +12,11 @@ export default {
   data() {
     return {
       options: [
-        {name: "Latest", url: "#"},
-        {name: "Oldest", url: "#"},
-        {name: "Score", url: "#"}
+        {name: "Latest", url: "?sortField=uploadDate&direction=-1"},
+        {name: "Oldest", url: "?sortField=uploadDate&direction=1"},
+        {name: "Score", url: "?sortField=score&direction=-1"},
+        {name: "Favourite latest", url: "?sortField=favoriteDate&direction=-1"},
+        {name: "Favourite oldest", url: "?sortField=favoriteDate&direction=1"}
       ]
     }
   }
