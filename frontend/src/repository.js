@@ -18,6 +18,14 @@ export function toggleFavouriteById(id) {
     return axios.post(`${BASE_URL}/api/toggleFavouriteById?id=${id}`).then(res => res.data);
 }
 
+export function incScoreById(id) {
+    return axios.post(`${BASE_URL}/api/incScoreById?id=${id}`).then(res => res.data);
+}
+
+export function decScoreById(id) {
+    return axios.post(`${BASE_URL}/api/decScoreById?id=${id}`).then(res => res.data);
+}
+
 export function getTagsBuTypes(type) {
     return axios.get(`${BASE_URL}/api/getTagsByType?type=${type}`).then(res => res.data);
 }

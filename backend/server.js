@@ -84,8 +84,28 @@ app.post("/api/toggleFavouriteById",(req,res) => {
             res.json(true);
         }).catch(err => {
             res.status(500);
-            res.send(false);
+            res.send(`Internal server error, ${err}`);
         })
+    }).catch(err => {
+        res.status(500);
+        res.send(`Internal server error, ${err}`);
+    });
+})
+
+app.post("/api/incScoreById", (req,res) => {
+    let id = req.query.id;
+    Metadata.updateOne({_id: mongoose.Types.ObjectId(id)},{$inc: {score: 1} }).then(() => {
+        res.json(true);
+    }).catch(err => {
+        res.status(500);
+        res.send(`Internal server error, ${err}`);
+    });
+});
+
+app.post("/api/decScoreById", (req,res) => {
+    let id = req.query.id;
+    Metadata.updateOne({_id: mongoose.Types.ObjectId(id)},{$inc: {score: -1} }).then(() => {
+        res.json(true);
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);

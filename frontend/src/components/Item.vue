@@ -7,12 +7,12 @@
   </div>
   <div>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-success">
+      <button id="incButton" type="button" class="btn btn-success" v-on:click="onScoreIncClicked">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
           <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
         </svg>
       </button>
-      <button type="button" class="btn btn-danger">
+      <button id="decButton" type="button" class="btn btn-danger" v-on:click="onScoreDecClicked">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
           <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z"/>
         </svg>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {getMetadataById, toggleFavouriteById} from "@/repository";
+import {getMetadataById, toggleFavouriteById, incScoreById, decScoreById} from "@/repository";
 
 export default {
   name: "Item",
@@ -69,8 +69,25 @@ export default {
         if(isToggled) {
           this.itemData.favorite = !this.itemData.favorite;
         }
-        else {
-          alert("Favourite failed");
+      }).catch(err => {
+        alert(err);
+        console.error(err);
+      })
+    },
+    onScoreIncClicked() {
+      incScoreById(this.itemData.id).then(isInced => {
+        if(isInced) {
+          this.itemData.score++;
+        }
+      }).catch(err => {
+        alert(err);
+        console.error(err);
+      })
+    },
+    onScoreDecClicked() {
+      decScoreById(this.itemData.id).then(isDeced => {
+        if(isDeced) {
+          this.itemData.score--;
         }
       }).catch(err => {
         alert(err);
