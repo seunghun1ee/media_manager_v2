@@ -1,10 +1,10 @@
 <template>
-  <SortControl></SortControl>
+  <SortControl v-on:sort="onSort"></SortControl>
   <ItemList v-bind="{pageName: pageName, items: items}"></ItemList>
 </template>
 
 <script>
-import {getAllMetadatas} from "@/repository";
+import {getAllMetadatas, getAllMetadatas2} from "@/repository";
 import ItemList from "@/components/ItemList";
 import SortControl from "@/components/SortControl";
 
@@ -24,6 +24,16 @@ export default {
           alert(err);
           console.error(err);
         })
+  },
+  methods: {
+    onSort(field, direction) {
+      getAllMetadatas2(field,direction)
+          .then(data => this.items = data)
+          .catch(err => {
+            alert(err);
+            console.error(err);
+          })
+    }
   }
 }
 </script>

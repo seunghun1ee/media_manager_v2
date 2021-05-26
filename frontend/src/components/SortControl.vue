@@ -2,7 +2,7 @@
   <hr>
   <h4>Sort by</h4>
   <ul class="list-inline">
-    <li class="list-inline-item" v-for="option in options" :key="option.name"><a v-bind:href="option.url">{{option.name}}</a></li>
+    <li class="list-inline-item" v-for="option in options" :key="option.name"><button class="btn btn-primary" v-on:click="emitSort(option.field,option.direction)">{{option.name}}</button></li>
   </ul>
 </template>
 
@@ -12,12 +12,17 @@ export default {
   data() {
     return {
       options: [
-        {name: "Latest", url: "?sortField=uploadDate&direction=-1"},
-        {name: "Oldest", url: "?sortField=uploadDate&direction=1"},
-        {name: "Score", url: "?sortField=score&direction=-1"},
-        {name: "Favourite latest", url: "?sortField=favoriteDate&direction=-1"},
-        {name: "Favourite oldest", url: "?sortField=favoriteDate&direction=1"}
+        {name: "Latest", field: "uploadDate", direction: -1},
+        {name: "Oldest", field: "uploadDate", direction: 1},
+        {name: "Score", field: "score", direction: -1},
+        {name: "Favourite latest", field: "favoriteDate", direction: -1},
+        {name: "Favourite oldest", field: "favoriteDate", direction: 1}
       ]
+    }
+  },
+  methods: {
+    emitSort(field,direction) {
+      this.$emit("sort",field,direction);
     }
   }
 }

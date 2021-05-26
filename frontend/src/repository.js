@@ -9,6 +9,10 @@ export function getAllMetadatas() {
     return axios.get(`${BASE_URL}/api/getAllMetadatas`).then(res => res.data);
 }
 
+export function getAllMetadatas2(sortField, direction) {
+    return axios.get(`${BASE_URL}/api/getAllMetadatas?sortField=${sortField}&direction=${direction}`).then(res => res.data);
+}
+
 export function getMetadatasByTags(tags) {
     let queryString = "tags[]=" + tags.join("&tags[]=");
     return axios.get(`${BASE_URL}/api/getMetadatasByTags?${queryString}`).then(res => res.data);
