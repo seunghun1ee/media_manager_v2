@@ -11,11 +11,12 @@ export default {
   components: {ItemList},
   data() {
     return  {
-      pageName: "Random files",
+      pageName: "",
       items: []
     }
   },
   created() {
+    this.pageName = this.$route.params.tag
     getMetadatasByTags([this.$route.params.tag]).then(data => this.items = data)
         .catch(err => {
           alert(err);

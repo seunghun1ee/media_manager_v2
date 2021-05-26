@@ -27,18 +27,32 @@ app.get("/",(req,res) => {
 
 app.get("/api/getAllMetadatas",(req,res) => {
     Metadata.find({}).then(metadatas => {
-        res.json(metadatas.map(metadata => metadata.toJSON()));
+        res.json(processDataFromDB(metadatas));
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
     });
 });
 
+app.get("/api/getMetadataById", (req,res) => {
+    let id = req.query.id;
+    Metadata.findOne({_id: mongoose.Types.ObjectId(id)}).then(metadata => {
+        metadata = metadata.toJSON();
+        metadata.id = metadata._id;
+        delete metadata._id;
+        console.log(metadata);
+        res.json(metadata);
+    }).catch(err => {
+        res.status(500);
+        res.send(`Internal server error, ${err}`);
+    });
+})
+
 app.get("/api/getMetadatasByTags", (req,res) => {
-    let tags = req.query.tag;
+    let tags = req.query.tags;
     console.log(tags);
     Metadata.find({tags: {$all: tags} }).then(metadatas => {
-        res.json(metadatas.map(metadata => metadata.toJSON()));
+        res.json(processDataFromDB(metadatas));
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
@@ -56,7 +70,7 @@ app.get("/api/getRandomMetadatas", (req,res) => {
             let randomNum = Math.floor(Math.random() * count);
             console.log(count, randomNum);
             Metadata.find().skip(randomNum).limit(limit).then(randoms => {
-                res.send(jsonifyMongoArray(randoms));
+                res.send(processDataFromDB(randoms));
             })
         }
     })
@@ -64,7 +78,7 @@ app.get("/api/getRandomMetadatas", (req,res) => {
 
 app.get("/api/getAllTags", (req,res) => {
     Tag.find({}).then(tags => {
-        res.json(jsonifyMongoArray(tags).sort(sortTagAlphabetically));
+        res.json(processDataFromDB(tags).sort(sortTagAlphabetically));
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
@@ -74,11 +88,11 @@ app.get("/api/getAllTags", (req,res) => {
 app.get("/api/getTagsByType", (req,res) => {
     let type = req.query.type;
     Tag.find({type: type}).then(tags => {
-        res.json(jsonifyMongoArray(tags).sort(sortTagAlphabetically));
+        res.json(processDataFromDB(tags).sort(sortTagAlphabetically));
     })
 })
 
-function jsonifyMongoArray(mongos) {
+function processDataFromDB(mongos) {
     let results = [];
     mongos.forEach(mongo => {
         let result = mongo.toJSON();

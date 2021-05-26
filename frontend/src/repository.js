@@ -6,8 +6,12 @@ export function getRandomMetadatas(limit) {
 }
 
 export function getMetadatasByTags(tags) {
-    let queryString = "tag=" + tags.join("&tag=");
+    let queryString = "tags[]=" + tags.join("&tags[]=");
     return axios.get(`${BASE_URL}/api/getMetadatasByTags?${queryString}`).then(res => res.data);
+}
+
+export function getMetadataById(id) {
+    return axios.get(`${BASE_URL}/api/getMetadataById?id=${id}`).then(res => res.data);
 }
 
 export function getTagsBuTypes(type) {
