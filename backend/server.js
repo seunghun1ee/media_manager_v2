@@ -76,6 +76,22 @@ app.get("/api/getRandomMetadatas", (req,res) => {
     })
 })
 
+app.get("/api/toggleFavouriteById",(req,res) => {
+    let id = req.query.id;
+    Metadata.findOne({_id: mongoose.Types.ObjectId(id)}, {favorite: 1, _id: 0}).then(data => {
+        let status = data.favorite;
+        Metadata.updateOne({_id: mongoose.Types.ObjectId(id)},{favorite: !status}).then(() => {
+            res.json(true);
+        }).catch(err => {
+            res.status(500);
+            res.send(false);
+        })
+    }).catch(err => {
+        res.status(500);
+        res.send(`Internal server error, ${err}`);
+    });
+})
+
 app.get("/api/getAllTags", (req,res) => {
     Tag.find({}).then(tags => {
         res.json(processDataFromDB(tags).sort(sortTagAlphabetically));
