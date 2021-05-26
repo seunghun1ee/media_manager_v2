@@ -5,6 +5,10 @@ export function getRandomMetadatas(limit) {
     return axios.get(`${BASE_URL}/api/getRandomMetadatas?limit=${limit}`).then(res => res.data);
 }
 
+export function getAllMetadatas() {
+    return axios.get(`${BASE_URL}/api/getAllMetadatas`).then(res => res.data);
+}
+
 export function getMetadatasByTags(tags) {
     let queryString = "tags[]=" + tags.join("&tags[]=");
     return axios.get(`${BASE_URL}/api/getMetadatasByTags?${queryString}`).then(res => res.data);

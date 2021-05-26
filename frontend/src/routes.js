@@ -3,11 +3,16 @@ import RandomItems from "@/components/RandomItems";
 import TaggedItems from "@/components/TaggedItems";
 import Item from "@/components/Item";
 import FavouriteItems from "@/components/FavouriteItems";
+import AllItems from "@/components/AllItems";
 
 export default [
     {
         path: "/",
         component: RandomItems
+    },
+    {
+        path: "/all",
+        component: AllItems
     },
     {
         path: "/tags",
