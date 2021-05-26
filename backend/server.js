@@ -76,7 +76,7 @@ app.get("/api/getRandomMetadatas", (req,res) => {
     })
 })
 
-app.get("/api/toggleFavouriteById",(req,res) => {
+app.post("/api/toggleFavouriteById",(req,res) => {
     let id = req.query.id;
     Metadata.findOne({_id: mongoose.Types.ObjectId(id)}, {favorite: 1, _id: 0}).then(data => {
         let status = data.favorite;

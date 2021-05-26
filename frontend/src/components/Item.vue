@@ -2,7 +2,7 @@
   <h2 :key="itemData.name">{{itemData.name}}</h2>
   <small>{{dateTime}}</small>
   <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" id="favouriteInput">
+    <input class="form-check-input" type="checkbox" id="favouriteInput" v-on:click="onFavClicked" v-bind:checked="itemData.favorite">
     <label class="form-check-label" for="favouriteInput">Favourite</label>
   </div>
   <div>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {getMetadataById} from "@/repository";
+import {getMetadataById, toggleFavouriteById} from "@/repository";
 
 export default {
   name: "Item",
@@ -62,7 +62,21 @@ export default {
           alert(err);
           console.error(err);
         });
-
+  },
+  methods: {
+    onFavClicked() {
+      toggleFavouriteById(this.itemData.id).then(isToggled => {
+        if(isToggled) {
+          this.itemData.favorite = !this.itemData.favorite;
+        }
+        else {
+          alert("Favourite failed");
+        }
+      }).catch(err => {
+        alert(err);
+        console.error(err);
+      })
+    }
   }
 }
 </script>
