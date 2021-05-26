@@ -25,5 +25,48 @@ export default {
 </script>
 
 <style>
+body {
+  color: white;
+  background: #252525;
+}
 
+a {
+  color: lightskyblue;
+}
+
+/*override btn btn-primary*/
+.btn.btn-primary {
+  color: #252525;
+  background-color: skyblue;
+  border-color: skyblue;
+}
+
+.btn.btn-primary:hover {
+  color: #252525;
+  background-color: deepskyblue;
+  border-color: deepskyblue;
+}
+
+/*override btn btn-secondary*/
+.btn.btn-secondary {
+  color: white;
+}
+
+.btn.btn-secondary:hover {
+  color: white;
+}
+
+.page-link {
+  color: #252525;
+}
+
+.page-link:hover {
+  color: black;
+}
+
+.page-item.active .page-link {
+  color: #252525;
+  background-color: lightskyblue;
+  border-color: lightskyblue;
+}
 </style>
