@@ -14,6 +14,10 @@ export function getMetadataById(id) {
     return axios.get(`${BASE_URL}/api/getMetadataById?id=${id}`).then(res => res.data);
 }
 
+export function getFavouriteMetadatas() {
+    return axios.get(`${BASE_URL}/api/getFavouriteMetadatas`).then(res => res.data);
+}
+
 export function toggleFavouriteById(id) {
     return axios.post(`${BASE_URL}/api/toggleFavouriteById?id=${id}`).then(res => res.data);
 }

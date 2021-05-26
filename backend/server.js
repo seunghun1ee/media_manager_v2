@@ -110,6 +110,15 @@ app.post("/api/decScoreById", (req,res) => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
     });
+});
+
+app.get("/api/getFavouriteMetadatas",(req,res) => {
+    Metadata.find({favorite: true}).then(metadatas => {
+        res.json(processDataFromDB(metadatas));
+    }).catch(err => {
+       res.status(500);
+       res.send(`Internal server error, ${err}`);
+    });
 })
 
 app.get("/api/getAllTags", (req,res) => {

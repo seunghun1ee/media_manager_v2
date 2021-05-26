@@ -2,6 +2,7 @@ import TagList from "@/components/TagList";
 import RandomItems from "@/components/RandomItems";
 import TaggedItems from "@/components/TaggedItems";
 import Item from "@/components/Item";
+import FavouriteItems from "@/components/FavouriteItems";
 
 export default [
     {
@@ -19,5 +20,9 @@ export default [
     {
         path: "/items/:id",
         component: Item
+    },
+    {
+        path: "/favourites",
+        component: FavouriteItems
     }
 ]
