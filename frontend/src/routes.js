@@ -4,6 +4,7 @@ import TaggedItems from "@/components/TaggedItems";
 import Item from "@/components/Item";
 import FavouriteItems from "@/components/FavouriteItems";
 import AllItems from "@/components/AllItems";
+import FileUploader from "@/components/FileUploader";
 
 export default [
     {
@@ -29,5 +30,9 @@ export default [
     {
         path: "/favourites",
         component: FavouriteItems
+    },
+    {
+        path: "/upload",
+        component: FileUploader
     }
 ]
