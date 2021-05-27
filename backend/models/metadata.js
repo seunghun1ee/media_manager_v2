@@ -6,9 +6,10 @@ const metadataSchema = new mongoose.Schema({
     tags: {type: Array, required: true},
     memo: {type: String, default: ""},
     uploadDate: {type: Date, required: true},
-    favoriteDate: {type: Date},
-    favorite: {type: Boolean, default: false},
-    score: {type: Number, default: 0}
+    favouriteDate: {type: Date},
+    favourite: {type: Boolean, default: false},
+    score: {type: Number, default: 0},
+    linkedIds: {type: [String], default: []}
 });
 
 module.exports = mongoose.model("Metadata",metadataSchema);

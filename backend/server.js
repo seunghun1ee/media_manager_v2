@@ -30,9 +30,10 @@ app.get("/api/getAllMetadatas",(req,res) => {
     let direction = req.query.direction;
     let sort = {uploadDate: -1};
     if(sortField && direction) {
+        delete sort.uploadDate;
         sort[sortField] = direction;
     }
-    Metadata.find({}).sort(sort).then(metadatas => {
+    Metadata.find().sort(sort).then(metadatas => {
         res.json(processDataFromDB(metadatas));
     }).catch(err => {
         res.status(500);
@@ -56,8 +57,15 @@ app.get("/api/getMetadataById", (req,res) => {
 
 app.get("/api/getMetadatasByTags", (req,res) => {
     let tags = req.query.tags;
+    let sortField = req.query.sortField;
+    let direction = req.query.direction;
+    let sort = {uploadDate: -1};
+    if(sortField && direction) {
+        delete sort.uploadDate;
+        sort[sortField] = direction;
+    }
     console.log(tags);
-    Metadata.find({tags: {$all: tags} }).then(metadatas => {
+    Metadata.find({tags: {$all: tags} }).sort(sort).then(metadatas => {
         res.json(processDataFromDB(metadatas));
     }).catch(err => {
         res.status(500);
@@ -84,9 +92,9 @@ app.get("/api/getRandomMetadatas", (req,res) => {
 
 app.post("/api/toggleFavouriteById",(req,res) => {
     let id = req.query.id;
-    Metadata.findOne({_id: mongoose.Types.ObjectId(id)}, {favorite: 1, _id: 0}).then(data => {
-        let status = data.favorite;
-        Metadata.updateOne({_id: mongoose.Types.ObjectId(id)},{favorite: !status}).then(() => {
+    Metadata.findOne({_id: mongoose.Types.ObjectId(id)}, {favourite: 1, _id: 0}).then(data => {
+        let status = data.favourite;
+        Metadata.updateOne({_id: mongoose.Types.ObjectId(id)},{favourite: !status}).then(() => {
             res.json(true);
         }).catch(err => {
             res.status(500);
@@ -119,7 +127,14 @@ app.post("/api/decScoreById", (req,res) => {
 });
 
 app.get("/api/getFavouriteMetadatas",(req,res) => {
-    Metadata.find({favorite: true}).then(metadatas => {
+    let sortField = req.query.sortField;
+    let direction = req.query.direction;
+    let sort = {uploadDate: -1};
+    if(sortField && direction) {
+        delete sort.uploadDate;
+        sort[sortField] = direction;
+    }
+    Metadata.find({favourite: true}).sort(sort).then(metadatas => {
         res.json(processDataFromDB(metadatas));
     }).catch(err => {
        res.status(500);
@@ -177,8 +192,11 @@ app.get("/api/import",(req,res) => {
             tags: data.tags,
             memo: data.memo,
             uploadDate: Date.parse(data.date.$date),
-            favorite: data.favorite
+            favourite: data.favorite
         });
+        if(data.favorite) {
+            metadata.favouriteDate = Date.now();
+        }
         metadata.save().then(() => {
             console.log("new metadata saved", metadata.name, metadata.uploadDate);
         }).catch(err => {
@@ -202,6 +220,7 @@ app.get("/api/import",(req,res) => {
 });
 
  */
+
 
 http.listen(port,() => {
    console.log(`listening at ${port}`);

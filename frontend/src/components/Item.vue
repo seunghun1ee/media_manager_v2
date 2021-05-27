@@ -2,7 +2,7 @@
   <h2 :key="itemData.name">{{itemData.name}}</h2>
   <small>{{dateTime}}</small>
   <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" id="favouriteInput" v-on:click="onFavClicked" v-bind:checked="itemData.favorite">
+    <input class="form-check-input" type="checkbox" id="favouriteInput" v-on:click="onFavClicked" v-bind:checked="itemData.favourite">
     <label class="form-check-label" for="favouriteInput">Favourite</label>
   </div>
   <div>
@@ -67,7 +67,7 @@ export default {
     onFavClicked() {
       toggleFavouriteById(this.itemData.id).then(isToggled => {
         if(isToggled) {
-          this.itemData.favorite = !this.itemData.favorite;
+          this.itemData.favourite = !this.itemData.favourite;
         }
       }).catch(err => {
         alert(err);

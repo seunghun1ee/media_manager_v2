@@ -15,8 +15,8 @@ export default {
         {name: "Latest", field: "uploadDate", direction: -1},
         {name: "Oldest", field: "uploadDate", direction: 1},
         {name: "Score", field: "score", direction: -1},
-        {name: "Favourite latest", field: "favoriteDate", direction: -1},
-        {name: "Favourite oldest", field: "favoriteDate", direction: 1}
+        {name: "Favourite latest", field: "favouriteDate", direction: -1},
+        {name: "Favourite oldest", field: "favouriteDate", direction: 1}
       ]
     }
   },
