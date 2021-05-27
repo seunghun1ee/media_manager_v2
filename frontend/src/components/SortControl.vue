@@ -9,6 +9,7 @@
 <script>
 export default {
   name: "SortControl",
+  emits: ["sort"],
   data() {
     return {
       options: [

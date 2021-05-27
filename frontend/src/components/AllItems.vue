@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import {getAllMetadatas, getAllMetadatas2} from "@/repository";
+import {getAllMetadatas} from "@/repository";
 import ItemList from "@/components/ItemList";
 import SortControl from "@/components/SortControl";
 
@@ -18,7 +18,7 @@ export default {
     }
   },
   created() {
-    getAllMetadatas()
+    getAllMetadatas("uploadDate",-1)
         .then(data => this.items = data)
         .catch(err => {
           alert(err);
@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     onSort(field, direction) {
-      getAllMetadatas2(field,direction)
+      getAllMetadatas(field,direction)
           .then(data => this.items = data)
           .catch(err => {
             alert(err);

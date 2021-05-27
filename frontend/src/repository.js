@@ -5,25 +5,21 @@ export function getRandomMetadatas(limit) {
     return axios.get(`${BASE_URL}/api/getRandomMetadatas?limit=${limit}`).then(res => res.data);
 }
 
-export function getAllMetadatas() {
-    return axios.get(`${BASE_URL}/api/getAllMetadatas`).then(res => res.data);
-}
-
-export function getAllMetadatas2(sortField, direction) {
+export function getAllMetadatas(sortField, direction) {
     return axios.get(`${BASE_URL}/api/getAllMetadatas?sortField=${sortField}&direction=${direction}`).then(res => res.data);
 }
 
-export function getMetadatasByTags(tags) {
-    let queryString = "tags[]=" + tags.join("&tags[]=");
-    return axios.get(`${BASE_URL}/api/getMetadatasByTags?${queryString}`).then(res => res.data);
+export function getMetadatasByTags(tags, sortField, direction) {
+    let tagsString = "tags[]=" + tags.join("&tags[]=");
+    return axios.get(`${BASE_URL}/api/getMetadatasByTags?${tagsString}&sortField=${sortField}&direction=${direction}`).then(res => res.data);
 }
 
 export function getMetadataById(id) {
     return axios.get(`${BASE_URL}/api/getMetadataById?id=${id}`).then(res => res.data);
 }
 
-export function getFavouriteMetadatas() {
-    return axios.get(`${BASE_URL}/api/getFavouriteMetadatas`).then(res => res.data);
+export function getFavouriteMetadatas(sortField, direction) {
+    return axios.get(`${BASE_URL}/api/getFavouriteMetadatas?sortField=${sortField}&direction=${direction}`).then(res => res.data);
 }
 
 export function toggleFavouriteById(id) {

@@ -1,14 +1,16 @@
 <template>
+  <SortControl v-on:sort="onSort"></SortControl>
   <ItemList v-bind="{pageName: pageName, items: items}"></ItemList>
 </template>
 
 <script>
 import {getFavouriteMetadatas} from "@/repository";
 import ItemList from "@/components/ItemList";
+import SortControl from "@/components/SortControl";
 
 export default {
   name: "FavouriteItems",
-  components: {ItemList},
+  components: {SortControl, ItemList},
   data() {
     return {
       pageName: "Favourites",
@@ -16,12 +18,22 @@ export default {
     }
   },
   created() {
-    getFavouriteMetadatas()
+    getFavouriteMetadatas("favouriteDate",-1)
         .then(data => this.items = data)
         .catch(err => {
           alert(err);
           console.error(err);
         });
+  },
+  methods: {
+    onSort(field, direction) {
+      getFavouriteMetadatas(field,direction)
+          .then(data => this.items = data)
+          .catch(err => {
+            alert(err);
+            console.error(err);
+          })
+    }
   }
 }
 </script>
