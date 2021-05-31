@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import {getTagsBuTypes} from "@/repository";
+import {getTagsByTypes} from "@/repository";
 
 export default {
   name: "TagList",
@@ -50,22 +50,22 @@ export default {
     }
   },
   created() {
-    getTagsBuTypes("group").then(data => this.groupList = data)
+    getTagsByTypes("group").then(data => this.groupList = data)
         .catch(err => {
           alert(err);
           console.error(err);
         });
-    getTagsBuTypes("person").then(data => this.personList = data)
+    getTagsByTypes("person").then(data => this.personList = data)
         .catch(err => {
           alert(err);
           console.error(err);
         });
-    getTagsBuTypes("general").then(data => this.generalList = data)
+    getTagsByTypes("general").then(data => this.generalList = data)
         .catch(err => {
           alert(err);
           console.error(err);
         });
-    getTagsBuTypes("etc").then(data => this.etcList = data)
+    getTagsByTypes("etc").then(data => this.etcList = data)
         .catch(err => {
           alert(err);
           console.error(err);

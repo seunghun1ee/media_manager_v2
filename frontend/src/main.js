@@ -8,7 +8,8 @@ const router = new createRouter({
     routes: routes
 })
 
+const app = createApp(App);
+app.config.devtools = true;
 
-
-createApp(App).use(router).mount('#app')
+app.use(router).mount('#app')
 

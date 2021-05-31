@@ -34,6 +34,10 @@ export function decScoreById(id) {
     return axios.post(`${BASE_URL}/api/decScoreById?id=${id}`).then(res => res.data);
 }
 
-export function getTagsBuTypes(type) {
+export function getAllTags() {
+    return axios.get(`${BASE_URL}/api/getAllTags`).then(res => res.data);
+}
+
+export function getTagsByTypes(type) {
     return axios.get(`${BASE_URL}/api/getTagsByType?type=${type}`).then(res => res.data);
 }
