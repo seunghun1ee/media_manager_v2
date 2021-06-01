@@ -38,13 +38,58 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
 const Metadata = require(path.join(__dirname,"./models/metadata.js"));
 const Tag = require(path.join(__dirname,"./models/tag.js"));
 
+const history = require("connect-history-api-fallback");
+
 const DEFAULT_ITEM_NUM = 6;
 
 app.use(cors());
-app.use('/files', express.static(path.join(__dirname, '../media_folder')));
+app.use('/files', express.static('../media_folder'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+const historyMiddleware = history({
+    index: "/",
+    verbose: true
+});
+
+app.use((req,res,next) => {
+    if(req.path.match("\/api\/.*")
+        || req.path.match("\/files\/.*")
+        || req.path.match("\/public\/.*")
+        || req.path.match("\/js\/.*")
+        || req.path.match("\/css\/.*")) {
+        next();
+    }
+    else {
+        historyMiddleware(req,res,next);
+    }
+})
 
 app.get("/",(req,res) => {
-    res.send("test");
+    res.sendFile(path.join(__dirname,"public/index.html"));
+});
+
+app.get("/js/*", (req,res) => {
+    res.sendFile(path.join(__dirname,`public/${req.path}`));
+});
+
+app.get("/css/*", (req,res) => {
+    res.sendFile(path.join(__dirname,`public/${req.path}`));
+});
+
+app.get("/files/:fileName/", (req,res) => {
+    const path = "./files/" + req.params.fileName;
+    fse.readFile(path,(err,data) => {
+        if(err) {
+            httpErrorHandler(err,res);
+        }
+        else {
+            fileType.fromBuffer(data).then(type => {
+                console.log("Serving file type:",type);
+                res.writeHead(200, {'Content-Type': type.mime});
+                res.end(data);
+            });
+        }
+    });
 });
 
 app.get("/api/getAllMetadatas",(req,res) => {
@@ -185,8 +230,26 @@ app.post("/api/uploadFiles", (req,res) => {
         if(err) {
             return res.status(500).send(err);
         }
-        console.log(req.body);
-        res.send("files uploaded");
+        let filenames = [];
+        console.log("Files saved");
+        for(let i = 0; i < req.files.length; i++) {
+            filenames.push(req.files[i].originalname);
+            console.log(req.files[i].originalname,`${req.files[i].size} Byte`);
+        }
+        let metadata = new Metadata({
+            name: req.body.name,
+            files: filenames,
+            tags: JSON.parse(req.body.tags),
+            memo: req.body.memo,
+            uploadDate: Date.now()
+        });
+        metadata.save().then(() => {
+            console.log("New meta data saved", metadata);
+            res.send("files uploaded");
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send(err);
+        })
     })
 })
 
@@ -209,6 +272,17 @@ function sortTagAlphabetically(a,b) {
         return 1;
     }
     return 0;
+}
+
+function httpErrorHandler(err,res) {
+    if(err.code === "ENOENT") {
+        res.writeHead(404, {'Content-Type':'text/html'});
+        res.end('404 not found '+err);
+    }
+    else {
+        res.writeHead(500, {'Content-Type':'text/html'});
+        res.end('500 Internal Server error '+err);
+    }
 }
 
 /*

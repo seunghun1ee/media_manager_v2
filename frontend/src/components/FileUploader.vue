@@ -76,7 +76,7 @@ export default {
       event.preventDefault();
       const fileUploadForm = document.getElementById("fileUploader");
       const formData = new FormData(fileUploadForm);
-      formData.append("tags",this.tags);
+      formData.append("tags",JSON.stringify(this.tags));
       postUploadFiles(formData)
           .then(res => {
             console.log(res);

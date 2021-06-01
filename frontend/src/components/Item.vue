@@ -20,7 +20,7 @@
     </div>
     <span class="ms-3">{{counterName}}: {{itemData.score}}</span>
   </div>
-  <p v-for="file in itemData.files" :key="file"><a v-bind:href="'/files/'+file"><img v-bind:src="'/files/'+file"></a></p>
+  <p v-for="file in itemData.files" :key="file"><a v-bind:href="'/files/'+file"><img class="img-fluid" v-bind:src="'/files/'+file"></a></p>
   <p>{{itemData.memo}}</p>
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill me-1" viewBox="0 0 16 16">
     <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
