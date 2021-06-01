@@ -6,8 +6,29 @@ const app = express();
 const http = require("http").createServer(app);
 const port = 3000;
 const path = require("path");
-const fs = require("fs");
+const fse = require("fs-extra");
 const cors = require("cors");
+const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname,"../media_folder/"));
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const imageFilter = function(req, file, cb) {
+    // Accept images only
+    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+        req.fileValidationError = 'Only image files are allowed!';
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+const upload = multer({storage,imageFilter});
+const uploadMultipleImages = upload.array("filesToUpload",10);
 
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
@@ -20,6 +41,7 @@ const Tag = require(path.join(__dirname,"./models/tag.js"));
 const DEFAULT_ITEM_NUM = 6;
 
 app.use(cors());
+app.use('/files', express.static(path.join(__dirname, '../media_folder')));
 
 app.get("/",(req,res) => {
     res.send("test");
@@ -155,6 +177,16 @@ app.get("/api/getTagsByType", (req,res) => {
     let type = req.query.type;
     Tag.find({type: type}).then(tags => {
         res.json(processDataFromDB(tags).sort(sortTagAlphabetically));
+    });
+});
+
+app.post("/api/uploadFiles", (req,res) => {
+    uploadMultipleImages(req,res,(err) => {
+        if(err) {
+            return res.status(500).send(err);
+        }
+        console.log(req.body);
+        res.send("files uploaded");
     })
 })
 
@@ -221,6 +253,13 @@ app.get("/api/import",(req,res) => {
 
  */
 
+fse.ensureDir(path.join(__dirname,"../media_folder"))
+    .then(() => {
+        console.log("../media_folder directory exists");
+    })
+    .catch(err => {
+        console.error(err);
+    });
 
 http.listen(port,() => {
    console.log(`listening at ${port}`);

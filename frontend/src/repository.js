@@ -41,3 +41,7 @@ export function getAllTags() {
 export function getTagsByTypes(type) {
     return axios.get(`${BASE_URL}/api/getTagsByType?type=${type}`).then(res => res.data);
 }
+
+export function postUploadFiles(data) {
+    return axios.post(`${BASE_URL}/api/uploadFiles`,data).then(res => res.data);
+}

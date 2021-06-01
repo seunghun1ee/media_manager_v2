@@ -1,6 +1,6 @@
 <template>
   <h1>Upload files</h1>
-  <form id="fileUploader" method="post" enctype="multipart/form-data">
+  <form id="fileUploader" enctype="multipart/form-data" v-on:submit="onSubmit">
     <div class="mb-3">
       <label class="form-label" for="fileInput">Attach files</label>
       <input class="form-control" id="fileInput" type="file" name="filesToUpload" required multiple>
@@ -20,14 +20,15 @@
     </div>
     <div class="mb-3">
       <label class="form-label" for="memoInput">Memo (optional)</label>
-      <textarea v-model="memo" class="form-control" id="memoInput" name="memo" rows="3"></textarea>
+      <textarea class="form-control" id="memoInput" name="memo" rows="3"></textarea>
     </div>
     <button class="btn btn-primary" type="submit">Upload</button>
   </form>
+  <p v-if="uploadSuccess">{{name}} was successfully uploaded</p>
 </template>
 
 <script>
-import {getAllTags} from "@/repository";
+import {getAllTags, postUploadFiles} from "@/repository";
 import Multiselect from "@vueform/multiselect";
 import "@vueform/multiselect/themes/default.css";
 
@@ -43,22 +44,24 @@ export default {
       filesToUpload: [],
       tags: [],
       memo: "",
+      uploadSuccess: false,
 
       tagOptions: [],
 
       multiselectProps: {
         mode: 'tags',
-        value: ['test'],
+        value: null,
         options: null,
         searchable: true,
         createTag: false,
         required: true,
         placeholder: "Add tags",
-        object: true
+        object: false
       }
     }
   },
   created() {
+    this.multiselectProps.value = this.tags;
     getAllTags()
         .then(data => {
           data.map(tag => {
@@ -67,6 +70,24 @@ export default {
           });
           this.multiselectProps.options = this.tagOptions;
         })
+  },
+  methods: {
+    onSubmit(event) {
+      event.preventDefault();
+      const fileUploadForm = document.getElementById("fileUploader");
+      const formData = new FormData(fileUploadForm);
+      formData.append("tags",this.tags);
+      postUploadFiles(formData)
+          .then(res => {
+            console.log(res);
+            this.uploadSuccess = true;
+            location.reload();
+          })
+          .catch(err => {
+            console.error(err);
+            alert(`File upload failed ${err}`);
+          });
+    }
   }
 }
 </script>
