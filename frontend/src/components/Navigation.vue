@@ -21,7 +21,6 @@ export default {
         {name: "Tag manager", path: "/tag_manager"},
         {name: "Upload files", path: "/upload"},
         {name: "Favourites", path: "/favourites"},
-        {name: process.env.VUE_APP_COUNTER_NAME, path: "#"}
       ]
     }
   },
