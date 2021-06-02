@@ -7,6 +7,7 @@ const http = require("http").createServer(app);
 const port = 3000;
 const path = require("path");
 const fse = require("fs-extra");
+const bodyParser = require("body-parser");
 const cors = require("cors");
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -43,6 +44,8 @@ const history = require("connect-history-api-fallback");
 const DEFAULT_ITEM_NUM = 6;
 
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/files', express.static('../media_folder'));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -249,9 +252,14 @@ app.post("/api/uploadFiles", (req,res) => {
         }).catch(err => {
             console.error(err);
             res.status(500).send(err);
-        })
-    })
-})
+        });
+    });
+});
+
+app.post("/api/create_tag",(req,res) => {
+    console.log(req.body);
+    res.send("request received");
+});
 
 function processDataFromDB(mongos) {
     let results = [];
