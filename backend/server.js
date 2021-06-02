@@ -41,7 +41,9 @@ const Tag = require(path.join(__dirname,"./models/tag.js"));
 
 const history = require("connect-history-api-fallback");
 
-const DEFAULT_ITEM_NUM = 6;
+const DEFAULT_ITEM_NUM = 3;
+const PAGINATE_SIZE = parseInt(process.env.PAGINATESIZE);
+const PAGINATE_OFFSET = parseInt(process.env.PAGINATEOFFSET);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -108,6 +110,45 @@ app.get("/api/getAllMetadatas",(req,res) => {
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
+    });
+});
+
+app.get("/api/getAllMetadatasWithPagination",(req,res) => {
+    if(!req.query.page) {
+        return res.status(400).send("page query cannot be empty");
+    }
+    let page = parseInt(req.query.page);
+    let size = req.query.size ? parseInt(req.query.size) : PAGINATE_SIZE;
+    let sortField = req.query.sortField;
+    let direction = req.query.direction;
+    let sort = {uploadDate: -1};
+    if(sortField && direction) {
+        delete sort.uploadDate;
+        sort[sortField] = direction;
+    }
+    Metadata.estimatedDocumentCount().then((count) => {
+        console.log("count", count)
+        const {limit, offset} = getLimitOffset(page,size);
+        Metadata.find().sort(sort).skip(offset).limit(limit).then(metadatas => {
+            let currentPage = page;
+            let totalPages = Math.ceil(count/limit)
+            const pageData = {
+                totalPages: totalPages,
+                currentPage: currentPage,
+                hasNextPage: (currentPage < totalPages - 1),
+                hasPrevPage: (currentPage > 0),
+                nextPage: currentPage + 1,
+                prevPage: currentPage -1,
+                lastPage: totalPages - 1
+            }
+            const response = {metadatas: processDataFromDB(metadatas), pageData: pageData};
+            res.json(response);
+        }).catch(err => {
+            res.status(500).send(`Internal server error, ${err}`);
+        });
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).send(err);
     });
 });
 
@@ -319,6 +360,11 @@ function httpErrorHandler(err,res) {
         res.writeHead(500, {'Content-Type':'text/html'});
         res.end('500 Internal Server error '+err);
     }
+}
+function getLimitOffset(page, size) {
+    const limit = size ? +size : PAGINATE_SIZE;
+    const offset = page ? page * limit : PAGINATE_OFFSET;
+    return {limit, offset};
 }
 
 /*
