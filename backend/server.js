@@ -130,16 +130,16 @@ app.get("/api/getAllMetadatasWithPagination",(req,res) => {
         console.log("count", count)
         const {limit, offset} = getLimitOffset(page,size);
         Metadata.find().sort(sort).skip(offset).limit(limit).then(metadatas => {
-            let currentPage = page;
+            let currentPage = page + 1;
             let totalPages = Math.ceil(count/limit)
             const pageData = {
                 totalPages: totalPages,
                 currentPage: currentPage,
-                hasNextPage: (currentPage < totalPages - 1),
-                hasPrevPage: (currentPage > 0),
+                hasNextPage: (currentPage < totalPages),
+                hasPrevPage: (currentPage > 1),
                 nextPage: currentPage + 1,
                 prevPage: currentPage -1,
-                lastPage: totalPages - 1
+                lastPage: totalPages
             }
             const response = {metadatas: processDataFromDB(metadatas), pageData: pageData};
             res.json(response);

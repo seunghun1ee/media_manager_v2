@@ -7,13 +7,14 @@
     <p><a v-bind:href="'/files/'+item.files[0]"><img class="img-fluid" v-bind:src="'/files/'+item.files[0]" v-bind:alt="item.name"></a></p>
     <p class="mb-5">{{item.memo}}</p>
   </article>
+
 </template>
 
 <script>
 export default {
   name: "ItemList",
   props: {
-    items: Array
+    items: Array,
   },
   data() {
     return {
