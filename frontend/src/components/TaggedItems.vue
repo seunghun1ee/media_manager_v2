@@ -1,24 +1,36 @@
 <template>
+  <div class="mb-3">
+    <TagTitle v-bind:tag-data="tagData"></TagTitle>
+  </div>
   <SortControl v-on:sort="onSort"></SortControl>
-  <ItemList v-bind="{pageName: pageName, items: items}"></ItemList>
+  <hr>
+  <ItemList v-bind="{items: items}"></ItemList>
 </template>
 
 <script>
 import ItemList from "@/components/ItemList";
-import {getMetadatasByTags} from "@/repository";
+import {getMetadatasByTags, getTagByValue} from "@/repository";
 import SortControl from "@/components/SortControl";
+import TagTitle from "@/components/TagTitle";
 
 export default {
   name: "TaggedItems",
-  components: {SortControl, ItemList},
+  components: {TagTitle, SortControl, ItemList},
   data() {
     return  {
-      pageName: "",
+      tagData: null,
       items: []
     }
   },
   created() {
-    this.pageName = this.$route.params.tag
+    getTagByValue(this.$route.params.tag)
+        .then(data => {
+          this.tagData = data;
+        })
+        .catch(err => {
+          alert(err);
+          console.error(err);
+        })
     getMetadatasByTags([this.$route.params.tag],"uploadDate",-1).then(data => this.items = data)
         .catch(err => {
           alert(err);

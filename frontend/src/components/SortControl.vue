@@ -1,6 +1,5 @@
 <template>
-  <hr>
-  <h4>Sort by</h4>
+  <h5>Sort by</h5>
   <ul class="list-inline">
     <li class="list-inline-item" v-for="option in options" :key="option.name"><button class="btn btn-primary" v-on:click="emitSort(option.field,option.direction)">{{option.name}}</button></li>
   </ul>

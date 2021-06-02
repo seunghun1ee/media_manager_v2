@@ -1,5 +1,6 @@
 <template>
   <h1>Upload files</h1>
+  <hr>
   <form id="fileUploader" enctype="multipart/form-data" v-on:submit="onSubmit">
     <div class="mb-3">
       <label class="form-label" for="fileInput">Attach files</label>

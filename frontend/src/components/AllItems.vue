@@ -1,6 +1,8 @@
 <template>
+  <h3 class="mb-3">All Items</h3>
   <SortControl v-on:sort="onSort"></SortControl>
-  <ItemList v-bind="{pageName: pageName, items: items}"></ItemList>
+  <hr>
+  <ItemList v-bind="{items: items}"></ItemList>
 </template>
 
 <script>
@@ -13,7 +15,6 @@ export default {
   components: {SortControl, ItemList},
   data() {
     return {
-      pageName: "All Items",
       items: []
     }
   },

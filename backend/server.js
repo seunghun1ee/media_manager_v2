@@ -228,6 +228,16 @@ app.get("/api/getTagsByType", (req,res) => {
     });
 });
 
+app.get("/api/getTagByValue",(req,res) => {
+    let value = req.query.value;
+    Tag.findOne({value: value}).then(tag => {
+        tag = tag.toJSON();
+        tag.id = tag._id;
+        delete tag._id;
+        res.json(tag);
+    });
+})
+
 app.post("/api/uploadFiles", (req,res) => {
     uploadMultipleImages(req,res,(err) => {
         if(err) {

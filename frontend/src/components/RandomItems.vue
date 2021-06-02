@@ -1,5 +1,6 @@
 <template>
-  <ItemList v-bind="{pageName: pageName, items: items}"></ItemList>
+  <h3 class="mb-3">Random Items</h3>
+  <ItemList v-bind="{items: items}"></ItemList>
 </template>
 
 <script>
@@ -11,7 +12,6 @@ export default {
   components: {ItemList},
   data() {
     return  {
-      pageName: "Random files",
       items: []
     }
   },
