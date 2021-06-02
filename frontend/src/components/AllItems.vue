@@ -2,15 +2,18 @@
   <h3 class="mb-3">All Items</h3>
   <SortControl v-on:sort="onSort"></SortControl>
   <hr>
+  <Loading v-if="loading"></Loading>
   <ItemList v-bind="{items: items, pageData: pageData}"></ItemList>
-  <VPagination
-    v-if="pageData"
-    v-model="page"
-    :pages="pageData.lastPage"
-    :range-size="2"
-    active-color="#87CEEB"
-    @update:modelValue="onListChange"
-  ></VPagination>
+  <div class="mb-5">
+    <VPagination
+        v-if="pageData"
+        v-model="page"
+        :pages="pageData.lastPage"
+        :range-size="2"
+        active-color="#87CEEB"
+        @update:modelValue="onListChange"
+    ></VPagination>
+  </div>
 </template>
 
 <script>
@@ -19,22 +22,25 @@ import ItemList from "@/components/ItemList";
 import SortControl from "@/components/SortControl";
 import VPagination from "@hennge/vue3-pagination";
 import "@hennge/vue3-pagination/dist/vue3-pagination.css";
+import Loading from "@/components/Loading";
 
 export default {
   name: "AllItems",
-  components: {SortControl, ItemList, VPagination},
+  components: {Loading, SortControl, ItemList, VPagination},
   data() {
     return {
       items: [],
       pageData: null,
       page: 1,
       sortField: "uploadDate",
-      direction: -1
+      direction: -1,
+      loading: true
     }
   },
   created() {
     getAllMetadatasWithPagination(0,"uploadDate",-1)
         .then(data => {
+          this.loading = false;
           this.items = data.metadatas;
           this.pageData = data.pageData;
         })
@@ -51,8 +57,11 @@ export default {
       this.onListChange();
     },
     onListChange() {
+      scroll(0,0);
+      this.loading = true;
       getAllMetadatasWithPagination(this.page - 1,this.sortField,this.direction)
           .then(data => {
+            this.loading = false;
             this.items = data.metadatas;
             this.pageData = data.pageData;
           })
