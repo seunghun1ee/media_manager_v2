@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const tagSchema = new mongoose.Schema({
-   tag: {type: String, required: true},
+   value: {type: String, required: true},
    type: {type: String, required: true},
-   title: {type: String, default: ""},
+   label: {type: String, default: ""},
    description: {type: String, default: ""}
 });
 

@@ -2,8 +2,8 @@
   <h3>Create new tag</h3>
   <form id="newTagForm" v-on:submit="onSubmit">
     <div class="mb-1">
-      <label for="newTagNameInput" class="form-label">New tag name</label>
-      <input id="newTagNameInput" v-model="newTagName" type="text" name="name" class="form-control" required>
+      <label for="newTagNameInput" class="form-label">New tag value</label>
+      <input id="newTagNameInput" v-model="newTagValue" type="text" name="value" class="form-control" required>
     </div>
     <div class="mb-1">
       <label class="form-label" for="newTagTypeInput">Tag type</label>
@@ -15,8 +15,8 @@
       </select>
     </div>
     <div class="mb-1">
-      <label class="form-label" for="newTagLabelInput">Tag title</label>
-      <input id="newTagLabelInput" v-model="newTagTitle" name="title" class="form-control" required>
+      <label class="form-label" for="newTagLabelInput">Tag label</label>
+      <input id="newTagLabelInput" v-model="newTagLabel" name="label" class="form-control" required>
     </div>
     <div class="mb-3">
       <label class="form-label" for="newTagDescriptionInput">Tag description</label>
@@ -33,9 +33,9 @@ export default {
   name: "TagManager",
   data() {
     return {
-      newTagName: null,
+      newTagValue: null,
       newTagType: "person",
-      newTagTitle: null,
+      newTagLabel: null,
       newTagDescription: null
     }
   },
@@ -44,9 +44,9 @@ export default {
       event.preventDefault();
 
       let tagData = {
-        tag: this.newTagName,
+        value: this.newTagValue,
         type: this.newTagType,
-        title: this.newTagTitle,
+        label: this.newTagLabel,
         description: this.newTagDescription
       };
       postCreateTag(tagData)

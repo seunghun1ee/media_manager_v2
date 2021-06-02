@@ -65,7 +65,7 @@ export default {
     getAllTags()
         .then(data => {
           data.map(tag => {
-            let option = {value: tag.tag, label: tag.tag};
+            let option = {value: tag.value, label: tag.value};
             this.tagOptions.push(option);
           });
           this.multiselectProps.options = this.tagOptions;

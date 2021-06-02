@@ -210,7 +210,7 @@ app.get("/api/getFavouriteMetadatas",(req,res) => {
        res.status(500);
        res.send(`Internal server error, ${err}`);
     });
-})
+});
 
 app.get("/api/getAllTags", (req,res) => {
     Tag.find({}).then(tags => {
@@ -273,10 +273,10 @@ function processDataFromDB(mongos) {
 }
 
 function sortTagAlphabetically(a,b) {
-    if(a.tag < b.tag) {
+    if(a.value < b.value) {
         return -1;
     }
-    if(a.tag > b.tag) {
+    if(a.value > b.value) {
         return 1;
     }
     return 0;
@@ -295,8 +295,8 @@ function httpErrorHandler(err,res) {
 
 /*
 app.get("/api/import",(req,res) => {
-    let rawMetadatas = fs.readFileSync(path.join(__dirname,"../test_metadata.json"));
-    let rawTags = fs.readFileSync(path.join(__dirname,"../test_tag.json"));
+    let rawMetadatas = fse.readFileSync(path.join(__dirname,"../test_metadata.json"));
+    let rawTags = fse.readFileSync(path.join(__dirname,"../test_tag.json"));
     let json = JSON.parse(rawMetadatas);
     json.forEach(data => {
         let metadata = new Metadata({
@@ -321,7 +321,7 @@ app.get("/api/import",(req,res) => {
     json2.forEach(data => {
         let tag = new Tag({
             _id: mongoose.Types.ObjectId(data._id.$oid),
-            tag: data.tag,
+            value: data.tag,
             type: data.type
         });
         tag.save().then(() => {

@@ -4,32 +4,32 @@
   <div>
     <h3>Groups</h3>
     <ul class="list-unstyled">
-      <li v-for="tag in groupList" :key="tag.tag" class="ms-4">
-        <a v-bind:href="'/tags/'+tag.tag">{{tag.tag}}</a>
+      <li v-for="tag in groupList" :key="tag.value" class="ms-4">
+        <a v-bind:href="'/tags/'+tag.value">{{tag.value}}</a>
       </li>
     </ul>
   </div>
   <div>
     <h3>People</h3>
     <ul class="list-unstyled">
-      <li v-for="tag in personList" :key="tag.tag" class="ms-4">
-        <a v-bind:href="'/tags/'+tag.tag">{{tag.tag}}</a>
+      <li v-for="tag in personList" :key="tag.value" class="ms-4">
+        <a v-bind:href="'/tags/'+tag.value">{{tag.value}}</a>
       </li>
     </ul>
   </div>
   <div>
     <h3>General</h3>
     <ul class="list-unstyled">
-      <li v-for="tag in generalList" :key="tag.tag" class="ms-4">
-        <a v-bind:href="'/tags/'+tag.tag">{{tag.tag}}</a>
+      <li v-for="tag in generalList" :key="tag.value" class="ms-4">
+        <a v-bind:href="'/tags/'+tag.value">{{tag.value}}</a>
       </li>
     </ul>
   </div>
   <div>
     <h3>etc</h3>
     <ul class="list-unstyled">
-      <li v-for="tag in etcList" :key="tag.tag" class="ms-4">
-        <a v-bind:href="'/tags/'+tag.tag">{{tag.tag}}</a>
+      <li v-for="tag in etcList" :key="tag.value" class="ms-4">
+        <a v-bind:href="'/tags/'+tag.value">{{tag.value}}</a>
       </li>
     </ul>
   </div>
