@@ -258,7 +258,25 @@ app.post("/api/uploadFiles", (req,res) => {
 
 app.post("/api/create_tag",(req,res) => {
     console.log(req.body);
-    res.send("request received");
+    req.body.value = req.body.value.toLowerCase();
+    Tag.find({value: req.body.value}).then(tags => {
+        if(tags.length > 0) {
+            return res.status(400).send("The tag with same value already exists");
+        }
+        let tag = new Tag({
+           value: req.body.value,
+           type: req.body.type,
+           label: req.body.label,
+           description: req.body.description
+        });
+        tag.save().then(() => {
+            console.log("New tag was saved",tag);
+            res.send("tag saved");
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send(err);
+        });
+    });
 });
 
 function processDataFromDB(mongos) {

@@ -54,8 +54,8 @@ export default {
             console.log(res);
           })
           .catch(err => {
-            alert(`Creating tag failed ${err}`);
-            console.error(err);
+            console.error(err.response.headers);
+            alert(`Creating tag failed ${err.response.data}`);
           });
     }
   }
