@@ -139,7 +139,8 @@ app.get("/api/getAllMetadatasWithPagination",(req,res) => {
                 hasPrevPage: (currentPage > 1),
                 nextPage: currentPage + 1,
                 prevPage: currentPage -1,
-                lastPage: totalPages
+                lastPage: totalPages,
+                itemCount: count
             }
             const response = {metadatas: processDataFromDB(metadatas), pageData: pageData};
             res.json(response);
@@ -288,7 +289,8 @@ app.get("/api/getFavouriteMetadatasWithPagination", (req,res) => {
                 hasPrevPage: (currentPage > 1),
                 nextPage: currentPage + 1,
                 prevPage: currentPage -1,
-                lastPage: totalPages
+                lastPage: totalPages,
+                itemCount: count
             }
             const response = {metadatas: processDataFromDB(metadatas), pageData: pageData};
             res.json(response);
