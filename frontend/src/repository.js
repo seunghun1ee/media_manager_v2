@@ -26,6 +26,10 @@ export function getFavouriteMetadatas(sortField, direction) {
     return axios.get(`${BASE_URL}/api/getFavouriteMetadatas?sortField=${sortField}&direction=${direction}`).then(res => res.data);
 }
 
+export function getFavouriteMetadatasWithPagination(page,sortField,direction) {
+    return axios.get(`${BASE_URL}/api/getFavouriteMetadatasWithPagination?page=${page}&sortField=${sortField}&direction=${direction}`).then(res => res.data);
+}
+
 export function toggleFavouriteById(id) {
     return axios.post(`${BASE_URL}/api/toggleFavouriteById?id=${id}`).then(res => res.data);
 }
