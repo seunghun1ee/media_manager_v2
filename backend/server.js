@@ -204,13 +204,22 @@ app.get("/api/getRandomMetadatas", (req,res) => {
 app.post("/api/toggleFavouriteById",(req,res) => {
     let id = req.query.id;
     Metadata.findOne({_id: mongoose.Types.ObjectId(id)}, {favourite: 1, _id: 0}).then(data => {
-        let status = data.favourite;
-        Metadata.updateOne({_id: mongoose.Types.ObjectId(id)},{favourite: !status}).then(() => {
-            res.json(true);
-        }).catch(err => {
-            res.status(500);
-            res.send(`Internal server error, ${err}`);
-        })
+        if(data.favourite) {
+            Metadata.updateOne({_id: mongoose.Types.ObjectId(id)}, {favourite: false, $unset: {favouriteDate: ""}}).then(() => {
+                res.json(true);
+            }).catch(err => {
+                res.status(500);
+                res.send(`Internal server error, ${err}`);
+            })
+        }
+        else {
+            Metadata.updateOne({_id: mongoose.Types.ObjectId(id)}, {favourite: true, favouriteDate: Date.now()}).then(() => {
+                res.json(true);
+            }).catch(err => {
+                res.status(500);
+                res.send(`Internal server error, ${err}`);
+            })
+        }
     }).catch(err => {
         res.status(500);
         res.send(`Internal server error, ${err}`);
