@@ -18,6 +18,11 @@ export function getMetadatasByTags(tags, sortField, direction) {
     return axios.get(`${BASE_URL}/api/getMetadatasByTags?${tagsString}&sortField=${sortField}&direction=${direction}`).then(res => res.data);
 }
 
+export function getMetadatasByTagsWithPagination(page,tags,sortField,direction) {
+    let tagString = "tags[]=" + tags.join("&tags[]=");
+    return axios.get(`${BASE_URL}/api/getMetadatasByTagsWithPagination?${tagString}&page=${page}&sortField=${sortField}&direction=${direction}`).then(res => res.data);
+}
+
 export function getMetadataById(id) {
     return axios.get(`${BASE_URL}/api/getMetadataById?id=${id}`).then(res => res.data);
 }

@@ -185,6 +185,47 @@ app.get("/api/getMetadatasByTags", (req,res) => {
     });
 });
 
+app.get("/api/getMetadatasByTagsWithPagination", (req,res) => {
+    if(!req.query.page) {
+        return res.status(400).send("page query cannot be empty");
+    }
+    let page = parseInt(req.query.page);
+    let size = req.query.size ? parseInt(req.query.size) : PAGINATE_SIZE;
+    let tags = req.query.tags;
+    let sortField = req.query.sortField;
+    let direction = req.query.direction;
+    let sort = {uploadDate: -1};
+    if(sortField && direction) {
+        delete sort.uploadDate;
+        sort[sortField] = direction;
+    }
+    Metadata.countDocuments({tags: {$all: tags}}).then((count) => {
+        console.log("count", count)
+        const {limit, offset} = getLimitOffset(page,size);
+        Metadata.find({tags: {$all: tags}}).sort(sort).skip(offset).limit(limit).then(metadatas => {
+            let currentPage = page + 1;
+            let totalPages = Math.ceil(count/limit)
+            const pageData = {
+                totalPages: totalPages,
+                currentPage: currentPage,
+                hasNextPage: (currentPage < totalPages),
+                hasPrevPage: (currentPage > 1),
+                nextPage: currentPage + 1,
+                prevPage: currentPage -1,
+                lastPage: totalPages,
+                itemCount: count
+            }
+            const response = {metadatas: processDataFromDB(metadatas), pageData: pageData};
+            res.json(response);
+        }).catch(err => {
+            res.status(500).send(`Internal server error, ${err}`);
+        });
+    }).catch(err => {
+        console.error(err);
+        return res.status(500).send(err);
+    });
+})
+
 app.get("/api/getRandomMetadatas", (req,res) => {
     let limit = (req.query.limit !== undefined) ? Number(req.query.limit) : DEFAULT_ITEM_NUM;
     console.log(limit);
