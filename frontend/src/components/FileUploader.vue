@@ -1,6 +1,8 @@
 <template>
   <h1>Upload files</h1>
   <hr>
+  <Loading v-if="isLoading"></Loading>
+  <p v-if="uploadSuccess">{{name}} was successfully uploaded</p>
   <form id="fileUploader" enctype="multipart/form-data" v-on:submit="onSubmit">
     <div class="mb-3">
       <label class="form-label" for="fileInput">Attach files</label>
@@ -25,18 +27,19 @@
     </div>
     <button class="btn btn-primary" type="submit">Upload</button>
   </form>
-  <p v-if="uploadSuccess">{{name}} was successfully uploaded</p>
 </template>
 
 <script>
 import {getAllTags, postUploadFiles} from "@/repository";
 import Multiselect from "@vueform/multiselect";
 import "@vueform/multiselect/themes/default.css";
+import Loading from "@/components/Loading";
 
 
 export default {
   name: "FileUploader",
   components: {
+    Loading,
     Multiselect
   },
   data() {
@@ -45,6 +48,7 @@ export default {
       filesToUpload: [],
       tags: [],
       memo: "",
+      isLoading: false,
       uploadSuccess: false,
 
       tagOptions: [],
@@ -75,12 +79,14 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
+      this.isLoading = true;
       const fileUploadForm = document.getElementById("fileUploader");
       const formData = new FormData(fileUploadForm);
       formData.append("tags",JSON.stringify(this.tags));
       postUploadFiles(formData)
           .then(res => {
             console.log(res);
+            this.isLoading = false;
             this.uploadSuccess = true;
             location.reload();
           })
