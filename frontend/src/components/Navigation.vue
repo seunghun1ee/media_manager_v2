@@ -1,17 +1,14 @@
 <template>
   <h1><a class="text-decoration-none" href="/">{{title}}</a></h1>
   <h3 v-for="menu in menus" :key="menu.name"><a class="text-decoration-none" v-bind:href="menu.path">{{menu.name}}</a></h3>
-  <form class="mb-3" method="get" action="/search">
-    <div class="mb-3">
-      <input class="form-control" type="text" name="keyword" required placeholder="Search">
-    </div>
-    <button class="btn btn-success">Search</button>
-  </form>
+  <SearchBar></SearchBar>
 </template>
 
 <script>
+import SearchBar from "@/components/SearchBar";
 export default {
   name: "Navigation",
+  components: {SearchBar},
   data() {
     return {
       title: "Title",

@@ -7,6 +7,7 @@ import AllItems from "@/components/AllItems";
 import FileUploader from "@/components/FileUploader";
 import TagManager from "@/components/TagManager";
 import TagEditor from "@/components/TagEditor";
+import SearchResultItems from "@/components/SearchResultItems";
 
 export default [
     {
@@ -44,5 +45,10 @@ export default [
     {
         path: "/tag_manager/:tag",
         component: TagEditor
+    },
+    {
+        path: "/search",
+        component: SearchResultItems,
+        props: (route) => ({query: route.query.tags})
     }
 ]
