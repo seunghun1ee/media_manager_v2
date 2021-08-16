@@ -421,6 +421,19 @@ app.post("/api/create_tag",(req,res) => {
     });
 });
 
+app.post("/api/edit_tag", (req,res) => {
+    console.log(req.body);
+    req.body.value = req.body.value.toLowerCase();
+    Tag.updateOne({value: req.body.value}, {$set: { type: req.body.type, label: req.body.label, description: req.body.description}})
+        .then(() => {
+            res.json(true);
+        })
+        .catch(err => {
+            res.status(500);
+            res.send(`Internal server error, ${err}`);
+        });
+})
+
 function processDataFromDB(mongos) {
     let results = [];
     mongos.forEach(mongo => {

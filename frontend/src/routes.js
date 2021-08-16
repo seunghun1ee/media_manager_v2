@@ -6,6 +6,7 @@ import FavouriteItems from "@/components/FavouriteItems";
 import AllItems from "@/components/AllItems";
 import FileUploader from "@/components/FileUploader";
 import TagManager from "@/components/TagManager";
+import TagEditor from "@/components/TagEditor";
 
 export default [
     {
@@ -39,5 +40,9 @@ export default [
     {
         path: "/tag_manager",
         component: TagManager
+    },
+    {
+        path: "/tag_manager/:tag",
+        component: TagEditor
     }
 ]

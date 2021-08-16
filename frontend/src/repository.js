@@ -66,3 +66,7 @@ export function postUploadFiles(data) {
 export function postCreateTag(data) {
     return axios.post(`${BASE_URL}/api/create_tag`,data).then(res => res.data);
 }
+
+export function postEditTag(data) {
+    return axios.post(`${BASE_URL}/api/edit_tag`, data).then(res => res.data);
+}
