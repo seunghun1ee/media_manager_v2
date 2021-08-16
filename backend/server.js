@@ -52,8 +52,7 @@ app.use('/files', express.static('../media_folder'));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const historyMiddleware = history({
-    index: "/",
-    verbose: true
+    index: "/"
 });
 
 app.use((req,res,next) => {
@@ -432,7 +431,7 @@ app.post("/api/edit_tag", (req,res) => {
             res.status(500);
             res.send(`Internal server error, ${err}`);
         });
-})
+});
 
 function processDataFromDB(mongos) {
     let results = [];
@@ -469,6 +468,30 @@ function getLimitOffset(page, size) {
     const limit = size ? +size : PAGINATE_SIZE;
     const offset = page ? page * limit : PAGINATE_OFFSET;
     return {limit, offset};
+}
+
+function backupMongoDB(model, filename) {
+    const d = new Date();
+    const dateString = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const cursor = model.find().lean().cursor();
+    const filename2 = `${filename}-${dateString}.json`;
+    const jsonStream = fse.createWriteStream(`${process.env.BACK_UP_LOCATION}/${filename2}`,{autoClose: false});
+    (async () => {
+        for(let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+            delete doc._id;
+            jsonStream.write(JSON.stringify(doc)+"\n");
+        }
+        jsonStream.close();
+    }) ();
+    console.log(`DB backup ${filename2} was saved successfully`);
+}
+
+function backupMedia(target) {
+    fse.copy("../media_folder",target).then(() => {
+        console.log("Media backup success at:", new Date());
+    }).catch((err) => {
+        console.log(err);
+    });
 }
 
 /*
@@ -521,6 +544,30 @@ fse.ensureDir(path.join(__dirname,"../media_folder"))
         console.error(err);
     });
 
+fse.ensureDir(path.join(__dirname,process.env.BACK_UP_LOCATION))
+    .then(() => {
+        console.log(`${process.env.BACK_UP_LOCATION} directory exists`);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+
+fse.ensureDir(path.join(__dirname,process.env.BACK_UP_LOCATION,".media_backup"))
+    .then(() => {
+        console.log(`${process.env.BACK_UP_LOCATION}/.media_backup directory exists`);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+
 http.listen(port,() => {
    console.log(`listening at ${port}`);
 });
+
+const time = parseInt(process.env.BACK_UP_INTERVAL_DAY,10) * 24 * 60 * 60 * 1000;
+const backUpInterval = setInterval(() => {
+    console.log("Backup start");
+    backupMongoDB(Metadata, "metadata-backup");
+    backupMongoDB(Tag,"tag-backup")
+    backupMedia(`${process.env.BACK_UP_LOCATION}/.media_backup`);
+}, time);
