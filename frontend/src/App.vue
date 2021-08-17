@@ -20,6 +20,9 @@ export default {
   name: 'App',
   components: {
     Navigation
+  },
+  beforeCreate() {
+    document.title = process.env.VUE_APP_WEBSITE_TITLE;
   }
 }
 </script>
