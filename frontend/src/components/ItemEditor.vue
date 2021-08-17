@@ -25,6 +25,15 @@
       </div>
       <button class="btn btn-primary" type="submit">Save</button>
     </form>
+    <div class="form-check form-switch mt-3">
+      <label class="form-check-label" for="flexSwitchCheckDefault" style="color: red">Danger zone</label>
+      <input v-model="isDanger" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+    </div>
+    <div v-if="isDanger">
+      <hr>
+      <button class="btn btn-danger" v-on:click="onDelete">Delete this item</button>
+      <p class="mt-1" style="color: red">WARNING! This action CANNOT be undone</p>
+    </div>
   </div>
 </template>
 
@@ -32,7 +41,7 @@
 import Multiselect from "@vueform/multiselect";
 import "@vueform/multiselect/themes/default.css";
 import Loading from "@/components/Loading";
-import {getAllTags, getMetadataById, postEditItem} from "@/repository";
+import {getAllTags, getMetadataById, postDeleteItem, postEditItem} from "@/repository";
 
 export default {
   name: "ItemEditor",
@@ -42,6 +51,7 @@ export default {
       itemData: null,
       isLoading: true,
       isSaved: false,
+      isDanger: false,
 
       tagOptions: [],
 
@@ -93,11 +103,28 @@ export default {
         alert(err);
         console.error(err);
       });
+    },
+    onDelete() {
+      postDeleteItem(this.$route.params.id).then(() => {
+        this.$router.push("/");
+      }).catch(err => {
+        alert(err);
+        console.error(err);
+      });
     }
   }
 }
 </script>
 
 <style scoped>
+  .form-check-input:checked {
+    background-color: red;
+    border-color: red;
+  }
 
+  .form-check-input:focus {
+    border-color: #ffc0cb;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(255 192 203 / 25%)
+  }
 </style>

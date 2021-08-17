@@ -410,6 +410,16 @@ app.post("/api/editItemById", (req, res) => {
     });
 });
 
+app.post("/api/deleteItemById", (req, res) => {
+    let id = req.query.id;
+    Metadata.deleteOne({_id:  mongoose.Types.ObjectId(id)}).then(() => {
+        res.json(true);
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send(err);
+    });
+})
+
 app.post("/api/create_tag",(req,res) => {
     console.log(req.body);
     req.body.value = req.body.value.toLowerCase();
