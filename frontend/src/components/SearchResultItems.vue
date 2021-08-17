@@ -1,9 +1,10 @@
 <template>
   <div>
+    <h2>Search results</h2>
     <SortControl v-on:sort="onSort"></SortControl>
     <hr>
     <Loading v-if="loading"></Loading>
-    <ItemList v-bind="{items: items}"></ItemList>
+    <ItemList v-bind="{items: items, count: pageData.itemCount}"></ItemList>
     <div class="mb-5">
       <VPagination
           v-if="pageData"
@@ -42,6 +43,12 @@ export default {
       loading: true
     }
   },
+  watch: {
+    $route() {
+      this.page = this.$route.query.page ? parseInt(this.$route.query.page) : 1;
+      this.onListChange();
+    }
+  },
   created() {
     getMetadatasByTagsWithPagination(this.page - 1,this.$route.query.tags,"uploadDate",-1)
         .then(data => {
@@ -54,18 +61,18 @@ export default {
           console.error(err);
         });
   },
-  beforeUpdate() {
-    getMetadatasByTagsWithPagination(this.page - 1,this.$route.query.tags,"uploadDate",-1)
-        .then(data => {
-          this.items = data.metadatas;
-          this.pageData = data.pageData;
-          this.loading = false;
-        })
-        .catch(err => {
-          alert(err);
-          console.error(err);
-        });
-  },
+  // beforeUpdate() {
+  //   getMetadatasByTagsWithPagination(this.page - 1,this.$route.query.tags,"uploadDate",-1)
+  //       .then(data => {
+  //         this.items = data.metadatas;
+  //         this.pageData = data.pageData;
+  //         this.loading = false;
+  //       })
+  //       .catch(err => {
+  //         alert(err);
+  //         console.error(err);
+  //       });
+  // },
   methods: {
     onSort(sortBy) {
       this.sortBy = sortBy;

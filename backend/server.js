@@ -494,7 +494,7 @@ function backupMedia(target) {
     });
 }
 
-/*
+
 app.get("/api/import",(req,res) => {
     let rawMetadatas = fse.readFileSync(path.join(__dirname,"../test_metadata.json"));
     let rawTags = fse.readFileSync(path.join(__dirname,"../test_tag.json"));
@@ -533,8 +533,6 @@ app.get("/api/import",(req,res) => {
     });
     res.send(json);
 });
-
- */
 
 fse.ensureDir(path.join(__dirname,"../media_folder"))
     .then(() => {
