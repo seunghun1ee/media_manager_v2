@@ -31,6 +31,7 @@ export default {
 body {
   color: white;
   background: #252525;
+  margin-bottom: 15%;
 }
 
 a {

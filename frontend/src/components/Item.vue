@@ -1,4 +1,5 @@
 <template>
+  <Loading v-if="isLoading"></Loading>
   <h2 :key="itemData.name">{{itemData.name}}</h2>
   <small>{{dateTime}}</small>
   <div class="form-check form-switch">
@@ -32,15 +33,17 @@
       <a v-bind:href="'/tags/'+tag">{{tag}}</a>
     </li>
   </ul>
-  <a class="btn btn-primary">Edit</a>
+  <a class="btn btn-primary" v-bind:href="'/edit/' + $route.params.id">Edit</a>
 
 </template>
 
 <script>
 import {getMetadataById, toggleFavouriteById, incScoreById, decScoreById} from "@/repository";
+import Loading from "@/components/Loading";
 
 export default {
   name: "Item",
+  components: {Loading},
   data() {
     return {
       itemData: {},
@@ -49,7 +52,8 @@ export default {
         timeStyle: "medium"
       },
       dateTime: null,
-      counterName: process.env.VUE_APP_COUNTER_NAME
+      counterName: process.env.VUE_APP_COUNTER_NAME,
+      isLoading: true
     }
   },
   created() {
@@ -57,6 +61,7 @@ export default {
         .then(data => {
           this.itemData = data;
           this.dateTime = Intl.DateTimeFormat("en-GB",this.dateTimeFormat).format(new Date(this.itemData.uploadDate));
+          this.isLoading = false;
         })
         .catch(err => {
           alert(err);

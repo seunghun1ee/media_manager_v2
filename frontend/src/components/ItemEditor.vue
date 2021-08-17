@@ -1,0 +1,103 @@
+<template>
+  <h1>Edit item</h1>
+  <hr>
+  <Loading v-if="isLoading"></Loading>
+  <p v-if="isSaved">Saved changes</p>
+  <div v-if="itemData">
+    <p v-for="file in itemData.files" :key="file"><img class="img-fluid" v-bind:src="'/files/'+file"></p>
+    <form id="fileUploader" enctype="multipart/form-data" v-on:submit="onSubmit">
+      <div class="mb-3">
+        <label class="form-label" for="nameInput">Name</label>
+        <input v-model="itemData.name" class="form-control" id="nameInput" type="text" name="name" required>
+      </div>
+      <div class="mb-3">
+        <div>
+          <label class="form-label">Tags</label>
+          <Multiselect style="background: white"
+                       v-model="itemData.tags"
+                       v-bind="multiselectProps"
+          ></Multiselect>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="memoInput">Memo (optional)</label>
+        <textarea v-model="itemData.memo" class="form-control" id="memoInput" name="memo" rows="3"></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import Multiselect from "@vueform/multiselect";
+import "@vueform/multiselect/themes/default.css";
+import Loading from "@/components/Loading";
+import {getAllTags, getMetadataById, postEditItem} from "@/repository";
+
+export default {
+  name: "ItemEditor",
+  components: {Multiselect, Loading},
+  data() {
+    return {
+      itemData: null,
+      isLoading: true,
+      isSaved: false,
+
+      tagOptions: [],
+
+      multiselectProps: {
+        mode: 'tags',
+        value: null,
+        options: null,
+        searchable: true,
+        createTag: false,
+        required: true,
+        placeholder: "Add tags",
+        object: false
+      }
+    }
+  },
+  created() {
+    this.multiselectProps.value = this.tags;
+    getAllTags()
+        .then(data => {
+          data.map(tag => {
+            let option = {value: tag.value, label: tag.value};
+            this.tagOptions.push(option);
+          });
+          this.multiselectProps.options = this.tagOptions;
+        });
+    getMetadataById(this.$route.params.id).then(data => {
+      this.itemData = data;
+      this.isLoading = false;
+    }).catch(err => {
+      alert(err);
+      console.error(err);
+    });
+  },
+  methods: {
+    onSubmit(event) {
+      event.preventDefault();
+      this.isLoading = true;
+      let changes = {
+        name: this.itemData.name,
+        tags: JSON.stringify(this.itemData.tags),
+        memo: this.itemData.memo
+      }
+      console.log(changes);
+      postEditItem(this.$route.params.id, changes).then(() => {
+        this.isLoading = false;
+        this.isSaved = true;
+        this.$router.push(`/items/${this.$route.params.id}`);
+      }).catch(err => {
+        alert(err);
+        console.error(err);
+      });
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

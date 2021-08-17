@@ -397,6 +397,19 @@ app.post("/api/uploadFiles", (req,res) => {
     });
 });
 
+app.post("/api/editItemById", (req, res) => {
+    let id = req.query.id;
+    let changes = req.body;
+    changes.tags = JSON.parse(changes.tags);
+    Metadata.updateOne({_id: mongoose.Types.ObjectId(id)}, {$set: { name: changes.name, tags: changes.tags, memo: changes.memo}})
+        .then(() => {
+            res.json(true);
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send(err);
+    });
+});
+
 app.post("/api/create_tag",(req,res) => {
     console.log(req.body);
     req.body.value = req.body.value.toLowerCase();
@@ -494,7 +507,7 @@ function backupMedia(target) {
     });
 }
 
-
+/*
 app.get("/api/import",(req,res) => {
     let rawMetadatas = fse.readFileSync(path.join(__dirname,"../test_metadata.json"));
     let rawTags = fse.readFileSync(path.join(__dirname,"../test_tag.json"));
@@ -533,6 +546,8 @@ app.get("/api/import",(req,res) => {
     });
     res.send(json);
 });
+
+ */
 
 fse.ensureDir(path.join(__dirname,"../media_folder"))
     .then(() => {

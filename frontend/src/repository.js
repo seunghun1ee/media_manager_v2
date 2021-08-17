@@ -63,6 +63,10 @@ export function postUploadFiles(data) {
     return axios.post(`${BASE_URL}/api/uploadFiles`,data).then(res => res.data);
 }
 
+export function postEditItem(id, changes) {
+    return axios.post(`${BASE_URL}/api/editItemById?id=${id}`, changes).then(res => res.data);
+}
+
 export function postCreateTag(data) {
     return axios.post(`${BASE_URL}/api/create_tag`,data).then(res => res.data);
 }
