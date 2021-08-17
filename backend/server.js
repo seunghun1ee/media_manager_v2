@@ -412,12 +412,24 @@ app.post("/api/editItemById", (req, res) => {
 
 app.post("/api/deleteItemById", (req, res) => {
     let id = req.query.id;
-    Metadata.deleteOne({_id:  mongoose.Types.ObjectId(id)}).then(() => {
-        res.json(true);
-    }).catch(err => {
-        console.error(err);
-        res.status(500).send(err);
-    });
+    Metadata.findOne({_id: mongoose.Types.ObjectId(id)}).then(meta => {
+        meta.files.forEach(file => {
+            let filePath = path.join(__dirname, "../media_folder", file);
+            fse.remove(filePath).then(() => {
+                console.log(`File ${file} was deleted`);
+            }).catch(err => {
+                console.error(err);
+                res.status(500).send(err);
+            });
+        });
+        Metadata.deleteOne({_id:  mongoose.Types.ObjectId(id)}).then(() => {
+            console.log("Metadata was deleted", meta);
+            res.json(true);
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send(err);
+        });
+    })
 })
 
 app.post("/api/create_tag",(req,res) => {
