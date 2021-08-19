@@ -53,6 +53,12 @@ export default {
           console.error(err);
         })
   },
+  watch: {
+    $route() {
+      this.page = this.$route.query.page ? parseInt(this.$route.query.page) : 1;
+      this.onListChange();
+    }
+  },
   methods: {
     onSort(sortBy) {
       this.sortBy = sortBy;

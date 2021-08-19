@@ -61,18 +61,6 @@ export default {
           console.error(err);
         });
   },
-  // beforeUpdate() {
-  //   getMetadatasByTagsWithPagination(this.page - 1,this.$route.query.tags,"uploadDate",-1)
-  //       .then(data => {
-  //         this.items = data.metadatas;
-  //         this.pageData = data.pageData;
-  //         this.loading = false;
-  //       })
-  //       .catch(err => {
-  //         alert(err);
-  //         console.error(err);
-  //       });
-  // },
   methods: {
     onSort(sortBy) {
       this.sortBy = sortBy;
