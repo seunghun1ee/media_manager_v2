@@ -68,7 +68,7 @@ export default {
             console.log(res);
             this.isLoading = false;
             this.isSaved = true;
-            location.reload();
+            this.$router.push(`/tags/${this.$route.params.tag}`);
           })
           .catch(err => {
             console.error(err.response.headers);
