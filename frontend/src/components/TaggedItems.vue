@@ -5,7 +5,7 @@
   <SortControl v-on:sort="onSort"></SortControl>
   <hr>
   <Loading v-if="loading"></Loading>
-  <ItemList v-bind="{items: items}"></ItemList>
+  <ItemList v-bind="{items: items, count: pageData.itemCount}"></ItemList>
   <div class="mb-5">
     <VPagination
         v-if="pageData"
