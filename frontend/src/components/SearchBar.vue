@@ -19,7 +19,7 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      this.tags = this.tagStrings.split(" ");
+      this.tags = this.tagStrings.toLowerCase().split(" ");
       this.$router.push({ path: "/search", query: { tags: this.tags}});
     }
   }
