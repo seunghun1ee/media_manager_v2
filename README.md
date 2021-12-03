@@ -17,3 +17,7 @@ For `/backend/.env`, you need to define
 3. `PAGINATEOFFSET` - Default number of offset when showing items (Recommended: 0)
 4. `BACK_UP_LOCATION` - Relative path for storing back up
 5. `BACK_UP_INTERVAL_DAY` - The number of days between back ups
+
+After defining environmental variables, run `npm run build` from `/frontend` to build vue app
+
+Then run `node .` to start the server
